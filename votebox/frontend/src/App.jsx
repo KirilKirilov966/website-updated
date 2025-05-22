@@ -7,9 +7,13 @@ const App = () => {
   const [votes, setVotes] = useState({});
 
   const fetchVotes = async () => {
-    const response = await fetch('/api/results');
-    const data = await response.json();
-    setVotes(data);
+    try {
+      const response = await fetch('/api/results');
+      const data = await response.json();
+      setVotes(data);
+    } catch (err) {
+      console.error("Failed to fetch votes:", err);
+    }
   };
 
   const handleVote = async (option) => {
@@ -25,12 +29,15 @@ const App = () => {
     fetchVotes();
   }, []);
 
+  const labels = ['Kubernetes', 'Docker', 'Jenkins'];
+  const values = labels.map((label) => votes[label] || 0);
+
   const data = {
-    labels: Object.keys(votes),
+    labels,
     datasets: [
       {
         label: 'Votes',
-        data: Object.values(votes),
+        data: values,
         backgroundColor: ['#6366f1', '#10b981', '#f59e0b'],
         borderRadius: 8,
       },
@@ -69,39 +76,39 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white font-sans">
-      <header className="bg-gray-950/90 backdrop-blur-md shadow py-6 px-4 border-b border-gray-700">
+    <div className="min-h-screen flex flex-col bg-gradient-to-tr from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white font-sans">
+      <header className="bg-[#0f172a]/80 backdrop-blur-lg shadow-lg py-6 px-4 border-b border-gray-700">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl font-extrabold tracking-tight text-center">VoteBox</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-center">VoteBox</h1>
           <p className="text-center text-lg text-gray-400 mt-2">What’s your favorite DevOps tool?</p>
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col items-center justify-center px-4 py-10">
-        <div className="w-full max-w-4xl bg-gray-800/80 backdrop-blur-md rounded-3xl shadow-xl p-8">
-          <div className="flex flex-col md:flex-row justify-center gap-6 mb-10">
-            {['Kubernetes', 'Docker', 'Jenkins'].map((option) => (
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-4xl bg-[#1e293b]/90 backdrop-blur-md border border-gray-700 rounded-3xl shadow-2xl p-10"
+        >
+          <div className="flex flex-wrap justify-center gap-6 mb-12">
+            {labels.map((option) => (
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 key={option}
                 onClick={() => handleVote(option)}
-                className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 text-white font-semibold text-lg py-3 px-6 rounded-2xl shadow-md backdrop-blur-sm"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 text-white font-semibold text-lg py-3 px-6 rounded-xl shadow-xl"
               >
                 {option}
               </motion.button>
             ))}
           </div>
 
-          <motion.div
-            className="bg-gray-900 p-6 rounded-2xl shadow-md"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="bg-[#0f172a] p-6 rounded-2xl shadow-lg">
             <Bar data={data} options={options} />
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </main>
 
       <footer className="text-center text-sm text-gray-500 py-6 border-t border-gray-700">
