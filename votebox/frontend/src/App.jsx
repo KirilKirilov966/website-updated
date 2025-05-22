@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
@@ -55,35 +54,40 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
-      <header className="bg-white shadow p-4 text-center">
-        <h1 className="text-3xl font-bold">VoteBox: What's Your Favorite Tech?</h1>
+    <div className="min-h-screen flex flex-col bg-white text-gray-900 font-sans">
+      <header className="bg-gray-100 shadow-md py-6 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-4xl font-extrabold tracking-tight text-center">VoteBox</h1>
+          <p className="text-center text-lg text-gray-600 mt-2">What's your favorite DevOps tool?</p>
+        </div>
       </header>
 
-      <main className="max-w-3xl mx-auto p-4">
-        <div className="flex justify-center gap-4 my-6">
-          {['Kubernetes', 'Docker', 'Jenkins'].map((option) => (
-            <button
-              key={option}
-              onClick={() => handleVote(option)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl shadow"
-            >
-              {option}
-            </button>
-          ))}
-        </div>
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-10">
+        <div className="w-full max-w-4xl bg-gray-50 rounded-3xl shadow-xl p-8">
+          <div className="flex flex-col md:flex-row justify-center gap-6 mb-10">
+            {['Kubernetes', 'Docker', 'Jenkins'].map((option) => (
+              <button
+                key={option}
+                onClick={() => handleVote(option)}
+                className="bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 text-white font-medium text-lg py-3 px-6 rounded-2xl shadow-md"
+              >
+                {option}
+              </button>
+            ))}
+          </div>
 
-        <motion.div
-          className="bg-white p-4 rounded-xl shadow-lg"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Bar data={data} options={options} />
-        </motion.div>
+          <motion.div
+            className="bg-white p-6 rounded-2xl shadow-md"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Bar data={data} options={options} />
+          </motion.div>
+        </div>
       </main>
 
-      <footer className="text-center text-sm text-gray-500 mt-10 p-4 border-t">
+      <footer className="text-center text-sm text-gray-500 py-6 border-t mt-10">
         © {new Date().getFullYear()} VoteBox | Created by Kiril Kirilov
       </footer>
     </div>
